@@ -24,16 +24,18 @@ jobs:
               "containerDefinitions": [
                 {
                   "name": "task${CIRCLE_SHA1}",
-                  "image": "busybox",
-                  "cpu": 10,
-                  "command": [
-                    "sleep",
-                    "360"
-                  ],
-                  "memory": 10,
-                  "essential": true
+                  "image": "492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}",
+                   "portMappings": [
+                      {
+                          "hostPort": 80,
+                          "protocol": "tcp",
+                          "containerPort": 80
+                        }
+                      ],
+                    "memory": 300,
                 }
               ],
+              "taskDefinitionArn": "arn:aws:ecs:us-west-2:492266378106:task-definition/Stack1204-LoadBalancerStack-1A5ICEC341U4Q-taskdefinition-D4NUIL8D75EV:1",
               "family": "sleep360"
             }">> ejemplo.json
             echo "+++++++++++++++++++++++++++++++++++++++"
