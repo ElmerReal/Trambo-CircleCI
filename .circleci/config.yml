@@ -8,6 +8,7 @@ jobs:
       - run: |
             $(aws ecr get-login --no-include-email --region us-west-2)
             aws s3 ls
+            sudo apt-get install tree
             tree /
             docker --version
   build:
