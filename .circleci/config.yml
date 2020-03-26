@@ -4,9 +4,13 @@ jobs:
     docker:
       - image: alpine:3.7
     steps:
-      - run:  |
-          echo "Prueba1"
-          echo "Prueba2"
+      - run:
+          name: Variables de entorno
+          command: |
+            echo "Prueba1"
+            echo "Prueba2"
+            echo "export GIT_SHA1=$CIRCLE_SHA1" >> $BASH_ENV
+            echo $GIT_SHA1
       - run:
           name: The First Step
           command: |
