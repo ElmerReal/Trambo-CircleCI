@@ -10,8 +10,9 @@ jobs:
       - run: # print the name of the branch we're on
           name: "What is the las commit sha?"
           command: echo ${CIRCLE_SHA1}
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - run:
+          name: Install Docker client
+          command: apk add docker-cli
       - run: docker ps
       - run: docker images    
       - run: docker build -t company/app:$CIRCLE_BRANCH .
