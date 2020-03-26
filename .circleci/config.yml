@@ -24,4 +24,11 @@ jobs:
           command: |
             echo 'Hello World!'
             echo 'This is the delivery pipeline'
-          
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - prebuild
+      - build:
+        requires:
+          -build          
