@@ -11,6 +11,9 @@ jobs:
             echo "Prueba2"
             echo "export GIT_SHA1=$CIRCLE_SHA1" >> $BASH_ENV
             echo ${GIT_SHA1}
+      - run: # print the name of the branch we're on
+          name: "What branch am I on?"
+          command: echo ${CIRCLE_BRANCH}
       - run:
           name: The First Step
           command: |
