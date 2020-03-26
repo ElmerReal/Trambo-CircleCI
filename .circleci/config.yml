@@ -1,13 +1,10 @@
 version: 2.1
 jobs:
-  prueba:
-    docker:
-      - image: alpine:3.7
+  prebuild:
+    machine: # executor type
+      image: ubuntu-1604:201903-01 # # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
     steps:
-      - checkout
-      - run: # print the name of the branch we're on
-          name: "Hola?"
-          command: echo ${CIRCLE_BRANCH}
+      - run: docker --version
   build:
     docker:
       - image: alpine:3.7
@@ -28,7 +25,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - prueba
+      - prebuild
       - build:
           requires:
-            - prueba
+            - prebuild
