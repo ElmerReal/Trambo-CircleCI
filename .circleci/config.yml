@@ -21,7 +21,7 @@ jobs:
             docker --version
             aws ecs register-task-definition --family nginx-service --container-definitions "[{\"name\":\"nginx-${CIRCLE_SHA1}\",\"image\":\"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
             aws ecs list-task-definitions
-            aws ecs update-service --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI --task-definition nginx-service
+            aws ecs update-service --cluster Cluster-Stack1204 --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI --task-definition nginx-service
   build:
     docker:
       - image: alpine:3.7
