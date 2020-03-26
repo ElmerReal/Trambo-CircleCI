@@ -19,7 +19,7 @@ jobs:
             docker tag nginx-elmer-trambo:${CIRCLE_SHA1} 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker push 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker --version
-            aws ecs register-task-definition --family nuevaTask --container-definitions "[{\"name\":\"Nginx-Service\",\"portMappings\":[{\"hostPort\":80,\"protocol\":\"tcp\",\"containerPort\":80}],\"image\":\"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
+            aws ecs register-task-definition --family nuevaTask --container-definitions "[{\"name\":\"Nginx-Service\","taskDefinitionArn":"arn:aws:ecs:us-west-2:492266378106:task-definition/Stack1204-LoadBalancerStack-1A5ICEC341U4Q-taskdefinition-D4NUIL8D75EV:1",\"portMappings\":[{\"hostPort\":80,\"protocol\":\"tcp\",\"containerPort\":80}],\"image\":\"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
             aws ecs list-task-definitions
             aws ecs update-service --cluster Cluster-Stack1204 --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI --task-definition nuevaTask
   build:
