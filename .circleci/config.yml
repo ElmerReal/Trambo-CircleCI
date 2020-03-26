@@ -6,11 +6,16 @@ jobs:
       image: ubuntu-1604:201903-01 # # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
     steps:
       - checkout
-      - run: |
+      - run:
+        name: "Crear imagen docker"
+        command: |
             $(aws ecr get-login --no-include-email --region us-west-2)
             aws s3 ls
             cd Imagen
             cat Dockerfile
+            echo ${CIRCLE_SHA1}
+            docker build -t nginx-elmer-trambo:${CIRCLE_SHA1} .
+            docker images
             docker --version
   build:
     docker:
