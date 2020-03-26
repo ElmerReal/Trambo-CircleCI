@@ -8,9 +8,7 @@ jobs:
       - run: |
             $(aws ecr get-login --no-include-email --region us-west-2)
             aws s3 ls
-            ls 
-            cd /home
-            ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /home' -e 's/-/|/'
+            cat Dockerfile
             docker --version
   build:
     docker:
