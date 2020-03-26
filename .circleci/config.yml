@@ -17,6 +17,7 @@ jobs:
             docker build -t nginx-elmer-trambo:${CIRCLE_SHA1} .
             docker images
             docker tag nginx-elmer-trambo:${CIRCLE_SHA1} 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
+            docker push 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker --version
   build:
     docker:
