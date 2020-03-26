@@ -19,6 +19,26 @@ jobs:
             docker tag nginx-elmer-trambo:${CIRCLE_SHA1} 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker push 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker --version
+            cat >> ejemplo.json <<EOL
+            {
+              "containerDefinitions": [
+                {
+                  "name": "task${CIRCLE_SHA1}",
+                  "image": "busybox",
+                  "cpu": 10,
+                  "command": [
+                    "sleep",
+                    "360"
+                  ],
+                  "memory": 10,
+                  "essential": true
+                }
+              ],
+              "family": "sleep360"
+            }
+            EOL
+            echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+            cat ejemplo.json
   build:
     docker:
       - image: alpine:3.7
