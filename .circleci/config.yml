@@ -31,4 +31,4 @@ workflows:
       - prueba
       - build:
           requires:
-            - pruebas
+            - prueba
