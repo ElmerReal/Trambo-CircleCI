@@ -40,6 +40,7 @@ jobs:
             }">> ejemplo.json
             echo "+++++++++++++++++++++++++++++++++++++++"
             cat ejemplo.json
+            aws ecs register-task-definition --cli-input-json ejemplo.json
   build:
     docker:
       - image: alpine:3.7
