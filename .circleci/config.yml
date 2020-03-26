@@ -37,7 +37,7 @@ jobs:
               "family": "sleep360"
             }
             EOL
-            echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+            echo "+++++++++++++++++++++++++++++++++++++++"
             cat ejemplo.json
   build:
     docker:
