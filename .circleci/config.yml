@@ -1,15 +1,14 @@
 version: 2.1
 jobs:
   prebuild:
-    working_directory: ~/Imagen
     machine: # executor type
       image: ubuntu-1604:201903-01 # # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
     steps:
       - run: |
             $(aws ecr get-login --no-include-email --region us-west-2)
             aws s3 ls
-            sudo apt-get install tree
-            tree /
+            cd /
+            ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
             docker --version
   build:
     docker:
