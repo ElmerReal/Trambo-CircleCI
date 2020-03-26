@@ -35,7 +35,7 @@ jobs:
                 }
               ],
               "family": "sleep360"
-            }" >> ejemplo.json"
+            }">> ejemplo.json
             echo "+++++++++++++++++++++++++++++++++++++++"
             cat ejemplo.json
   build:
