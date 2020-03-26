@@ -19,26 +19,7 @@ jobs:
             docker tag nginx-elmer-trambo:${CIRCLE_SHA1} 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker push 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             docker --version
-            echo "{
-              \"containerDefinitions\": [
-                {
-                  \"name\": \"task${CIRCLE_SHA1}\",
-                  \"image\": \"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",
-                   \"portMappings\": [
-                      {
-                          \"hostPort\": 80,
-                          \"protocol\": \"tcp\",
-                          \"containerPort\": 80
-                        }
-                      ],
-                    \"memory\": 300,
-                    \"essential\": true
-                }
-              ]
-            }">> ejemplo.json
-            echo "+++++++++++++++++++++++++++++++++++++++"
-            cat ejemplo.json
-            aws ecs register-task-definition --cli-input-json ejemplo.json
+            aws ecs register-task-definition --family nginx-service --container-definitions "[{\"name\":\"nginx-${CIRCLE_SHA1}\",\"image\":\"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
   build:
     docker:
       - image: alpine:3.7
