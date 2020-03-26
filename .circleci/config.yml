@@ -8,7 +8,7 @@ jobs:
       - run: |
             $(aws ecr get-login --no-include-email --region us-west-2)
             aws s3 ls
-            ls 
+            tree /
             docker --version
   build:
     docker:
