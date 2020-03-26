@@ -4,8 +4,12 @@ jobs:
     docker:
       - image: alpine:3.7
     steps:
+      - run:  |
+          echo "Prueba1"
+          echo "Prueba2"
       - run:
           name: The First Step
           command: |
             echo 'Hello World!'
             echo 'This is the delivery pipeline'
+          
