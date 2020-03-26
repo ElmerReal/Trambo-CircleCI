@@ -9,6 +9,8 @@ jobs:
             aws s3 ls
             touch prueba
             ls
+            cd /
+            ls
             docker --version
   build:
     docker:
