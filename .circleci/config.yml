@@ -10,11 +10,9 @@ jobs:
       - run: # print the name of the branch we're on
           name: "What is the las commit sha?"
           command: echo ${CIRCLE_SHA1}
-      - run:
-          name: Variables de entorno
-          command: |
-            echo "Prueba1"
-            echo "Prueba2"
+      - run: docker ps
+      - run: docker images    
+      - run: docker build -t company/app:$CIRCLE_BRANCH .
       - run:
           name: The First Step
           command: |
