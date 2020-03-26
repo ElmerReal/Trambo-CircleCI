@@ -9,7 +9,7 @@ jobs:
             aws s3 ls
             touch prueba
             ls
-            cd /home/circleci
+            cd /home
             ls 
             docker --version
   build:
