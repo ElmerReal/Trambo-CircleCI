@@ -1,9 +1,12 @@
 version: 2.1
 jobs:
   prueba:
-    machine: true
+    docker:
+      - image: alpine:3.7
     steps:
-    - run: docker --v
+      - run: # print the name of the branch we're on
+          name: "Hola?"
+          command: echo ${CIRCLE_BRANCH}
   build:
     docker:
       - image: alpine:3.7
