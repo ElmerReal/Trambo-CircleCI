@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  prebuild:
+  prueba:
     machine: true
     steps:
     - run: docker --v
@@ -24,7 +24,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - prebuild
+      - prueba
       - build:
         requires:
-          -prebuild          
+          -prueba          
