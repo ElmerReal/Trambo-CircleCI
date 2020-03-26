@@ -33,6 +33,7 @@ jobs:
                         }
                       ],
                     "memory": 300,
+                    "essential": true
                 }
               ],
               "taskDefinitionArn": "arn:aws:ecs:us-west-2:492266378106:task-definition/Stack1204-LoadBalancerStack-1A5ICEC341U4Q-taskdefinition-D4NUIL8D75EV:1",
