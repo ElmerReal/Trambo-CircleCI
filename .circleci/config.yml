@@ -30,6 +30,4 @@ workflows:
   build_and_test:
     jobs:
       - prueba
-      - build:
-        requires:
-          - prueba          
+      - build
