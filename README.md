@@ -48,11 +48,11 @@ controll the execution flow of the jobs.
             docker push 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
             #Just to check Docker version
             docker --version
-            #Whe use this line to define the task definition.
+            #Defining a new task definition.
             aws ecs register-task-definition --family nuevaTask --container-definitions "[{\"name\":\"Nginx-Service\",\"portMappings\":[{\"hostPort\":80,\"protocol\":\"tcp\",\"containerPort\":80}],\"image\":\"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
-            #Whe list the task definitiosn in aws account to check if the previous task definition were succesfuly created.
+            #Listin all the task definition availables in aws account to check if the previous task definition were succesfuly created.
             aws ecs list-task-definitions
-            #We update the service using the new task definition.
+            #Updating the service using the new task definition.
             aws ecs update-service --cluster Cluster-Stack1204 --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI --task-definition nuevaTask --health-check-grace-period-seconds 0
             aws ecs update-service --force-new-deployment --cluster Cluster-Stack1204 --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI
  
