@@ -13,6 +13,7 @@ jobs:
       - run:
           name: "Build Image"
           command: |
+            cd Imagen
             docker build -t nginx-elmer-trambo:${CIRCLE_SHA1} .
       - run:
           name: "Tag and push Image to repo"
