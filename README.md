@@ -13,74 +13,76 @@ controll the execution flow of the jobs.
 ## jobs
 
 ### prebuild
-- working_directory: with this attributoe we indicate the folder of the repo where we are going to be placed.
-- machine: because we have to use docker we indicates tha the jobs will be executed in a machin with ubuntu.
-- steps: all the command lines tha we are going to execute in the machine.
+the following steps are needed in order to update a ECS service with
+new container.
 
-```
-
-  prebuild:
-    working_directory: ~/Imagen
-    machine: # executor type
-      image: ubuntu-1604:201903-01 # # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
-    steps:
-      - checkout
-      - run:
-          name: "Crear imagen docker"
-          command: |
-            #Generate a aws token to connect with ECR
-            $(aws ecr get-login --no-include-email --region us-west-2)
-            #Just to test the conection with aws account
-            aws s3 ls
-            #Change the folder to Image folder
-            cd Imagen
-            #Print the Dockerfile content
-            cat Dockerfile
-            #Print the sha of the commit that triggered the job
-            echo ${CIRCLE_SHA1}
-            #buid the Dockerfile using the sha of the commit as tag
-            docker build -t nginx-elmer-trambo:${CIRCLE_SHA1} .
-            #List all the docker images availables to check if the image was created succesfuly
-            docker images
-            #tag the docker image with specific info required for aws
-            docker tag nginx-elmer-trambo:${CIRCLE_SHA1} 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
-            #push the image to ECR
-            docker push 492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}
-            #Just to check Docker version
-            docker --version
-            #Defining a new task definition.
-            aws ecs register-task-definition --family nuevaTask --container-definitions "[{\"name\":\"Nginx-Service\",\"portMappings\":[{\"hostPort\":80,\"protocol\":\"tcp\",\"containerPort\":80}],\"image\":\"492266378106.dkr.ecr.us-west-2.amazonaws.com/nginx-elmer-trambo:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
-            #Listin all the task definition availables in aws account to check if the previous task definition were succesfuly created.
-            aws ecs list-task-definitions
-            #Updating the service using the new task definition.
-            aws ecs update-service --cluster Cluster-Stack1204 --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI --task-definition nuevaTask --health-check-grace-period-seconds 0
-            aws ecs update-service --force-new-deployment --cluster Cluster-Stack1204 --service Stack1204-LoadBalancerStack-1A5ICEC341U4Q-service-VE75L46TFODI
+#### Steps
+ - Login ECR
+ This command uses the aws acces id and aws secre access id to acces to ECR
  
- ```
-
-### build
-
-```
-
-  build:
-    docker:
-      - image: alpine:3.7
-    steps:
-      - checkout
-      - run: # print the name of the branch we're on
-          name: "What branch am I on?"
-          command: echo ${CIRCLE_BRANCH}
-      - run: # print the name of the branch we're on
-          name: "What is the las commit sha?"
-          command: echo ${CIRCLE_SHA1}
-      - run:
-          name: The First Step
+  ```
+   - run:
+          name: "Login ECR"
           command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
+            $(aws ecr get-login --no-include-email --region us-west-2)
+      
+  ```
+ - Build Image
+ This docker command build a image from a Docker file stored in Image folder in the same repo
+ 
+  ```
+   - run:
+          name: "Build Image"
+          command: |
+            cd Imagen
+            docker build -t nginx-elmer-trambo:${CIRCLE_SHA1} .
+      
+  ```
 
-```
+ - Tag and push Image to repo
 
+ This commands are used to upload the local image previously created to ECR.
+ 
+  ```
+ - run:
+          name: "Tag and push Image to repo"
+          command: |
+            docker tag nginx-elmer-trambo:${CIRCLE_SHA1} $Uri_ECR:${CIRCLE_SHA1}
+            docker push $Uri_ECR:${CIRCLE_SHA1}
+  ```
+
+ - Create task definition and register in specific service
+ 
+ To create the new task definitio we use the cli comman aws ecs to create and register in a specific services
+ 
+  ```
+- run:
+          name: "Create task definition and register in specific service"
+          command: |
+            aws ecs register-task-definition --family nuevaTask --container-definitions "[{\"name\":\"Nginx-Service\",\"portMappings\":[{\"hostPort\":80,\"protocol\":\"tcp\",\"containerPort\":80}],\"image\":\"$Uri_ECR:${CIRCLE_SHA1}\",\"cpu\":10,\"memory\":300,\"essential\":true}]"
+  ```
+   - Update service and attack new task definition
+
+ This command trigger the proces of updating the ECS service
+ 
+  ```
+ - run:
+          name: "Update service and attack new task definition"
+          command: |
+            aws ecs update-service --cluster $ClusterName --service $ServiceName --task-definition nuevaTask 
+    
+  ```
+   - Wait until service reach steady state
+
+ This command waits until the ECS cluster reaches a steable state
+ 
+  ```
+  - run:
+          name: "Wait until service reach steady state"
+          command: |
+            aws ecs wait services-stable --cluster $ClusterName --services $ServiceName
+    
+  ```
 ## workflows
 Here we indicate the jobs belogns to the workflow. If whe just list the jobs them will be excuted simultaniously, in this case we defina that build jobs requires that prebuild job have to be completed to start.
 ```
